@@ -13,9 +13,22 @@ export default function TodoInput({ onAddTodo }: Props) {
     setInput("");
   };
   return (
-    <div>
+    <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
       <input value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={handleAdd}>追加</button>
+      <button
+        onClick={handleAdd}
+        style={{
+          backgroundColor: "#a5daed",
+          color: "white",
+          border: "none",
+          padding: "8px 14px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontWeight: "bold",
+        }}
+      >
+        追加
+      </button>
     </div>
   );
 }

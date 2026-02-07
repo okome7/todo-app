@@ -5,6 +5,7 @@ import TodoList from "./components/TodoList";
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const addTodo = (text: string) => {
     setTodos([
@@ -30,10 +31,43 @@ export default function App() {
   };
 
   return (
-    <div>
-      <h1>Todo App</h1>
+    <div style={{ textAlign: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <h1 style={{ color: "#a5daed", margin: "10px 0" }}>ToDoリスト</h1>
+
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          style={{
+            background: "none",
+            border: "1px solid #ccc",
+            padding: "4px 8px",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          {isEditing ? "完了" : "編集"}
+        </button>
+      </div>
+
       <TodoInput onAddTodo={addTodo} />
-      <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+
+      <div
+        style={{ maxWidth: "400px", margin: "40px auto", textAlign: "left" }}
+      >
+        <TodoList
+          todos={todos}
+          onToggle={toggleTodo}
+          onDelete={deleteTodo}
+          isEditing={isEditing}
+        />
+      </div>
     </div>
   );
 }
