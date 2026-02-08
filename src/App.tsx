@@ -1,33 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Todo } from "./types/todo";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
 
+const STORAGE_KEY = "todos_v1";
+
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Todo[];
+        setTodos(parsed);
+      }
+    } catch (e) {
+      console.error("読み込み失敗", e);
+    } finally {
+      setLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    } catch (e) {
+      console.error("保存失敗", e);
+    }
+  }, [todos, loaded]);
 
   const addTodo = (text: string) => {
-    setTodos([
-      ...todos,
-      {
-        id: Date.now(),
-        text,
-        completed: false,
-      },
-    ]);
+    setTodos((prev) => [...prev, { id: Date.now(), text, completed: false }]);
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
+    setTodos((prev) =>
+      prev.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   return (
