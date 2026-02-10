@@ -18,7 +18,7 @@ export default function App() {
         setTodos(parsed);
       }
     } catch (e) {
-      console.error("読み込み失敗", e);
+      console.error(e);
     } finally {
       setLoaded(true);
     }
@@ -29,7 +29,7 @@ export default function App() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
     } catch (e) {
-      console.error("保存失敗", e);
+      console.error(e);
     }
   }, [todos, loaded]);
 
